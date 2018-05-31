@@ -1,3 +1,13 @@
 <h1>{{title}}</h1>
-<app-heroes></app-heroes>
+<!--
+之所以移除 <app-heroes> 是因为当用户进行导航时，你不再仅仅显示 HeroesComponent。
+
+<router-outlet> 会告诉路由器要在哪里显示路由到的视图。
+-->
+<!--<app-heroes></app-heroes>-->
+<nav>
+  <a routerLink="/heroes">Heroes</a>
+  <a routerLink="/dashboard">Dashboard</a>
+</nav>
+<router-outlet></router-outlet>
 <app-messages></app-messages>
