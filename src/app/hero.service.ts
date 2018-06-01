@@ -23,6 +23,7 @@ export class HeroService {
   ) {
   }
 
+  /** GET heroes from the server */
   getHeroes(): Observable<Hero[]> {
     // TODO:send the message _after_ fetching the heroes
     // this.messageService.add('HeroService:fetched heroes');
@@ -41,6 +42,9 @@ export class HeroService {
     // 具体到这次 HttpClient.get 调用，它返回一个 Observable<Hero[]>，顾名思义就是“一个英雄数组的可观察对象”。在实践中，它也只会返回一个英雄数组。
   }
 
+  /** GET hero by id. Return `undefined` when id not found */
+  /* GET heroes whose name contains search term */
+
   // 这里与上面的getHeroes的区别，上面返回的是一个数组[],而这里返回的只是一个Observable<Hero>
   getHero(id: number): Observable<Hero> {
     // TODO:send the message _after_ fetching the hero
@@ -56,7 +60,20 @@ export class HeroService {
     );
   }
 
+  /* GET heroes whose name contains serach term */
+  searchHeroes(term: string): Observable<Hero[]> {
+    if (!term.trim()) {
+      // if not search term,return empty hero array
+      return of([]);
+    }
 
+    return this.http.get<Hero[]>(`api/heroes/?name=${term}`).pipe(
+      tap(_ => this.log(`found heroes matching "${term}"`)),
+      catchError(this.handleError<Hero[]>('searchHeroes', []))
+    );
+  }
+
+  //////// Save methods //////////
   updateHero(hero: Hero): Observable<any> {
     return this.http.put(this.heroesUrl, hero, httpOptions).pipe(
       tap(_ => this.log(`update hero id=${hero.id}`)),
